@@ -1,24 +1,35 @@
 # DevFlowCheck Task Orchestrator
 
-## Getting Started
+## Getting Started (Running DevFlowCheck)
 
-This project leverages an automated workflow. Follow these steps to get started:
+Follow these steps to set up and run the **DevFlowCheck** project itself:
 
-1.  **Install Dependencies:**
-    *   Clone the repository (if you haven't already).
-    *   Navigate to the project directory (`DevFlowCheck`).
-    *   Run the command:
+1.  **Clone the Repository:**
+    *   Open your terminal or command prompt.
+    *   Navigate to the directory where you want to place the project (e.g., `cd C:/wamp64/www`).
+    *   Clone the repository from GitHub:
+        ```bash
+        git clone https://github.com/bestyec/DevFlowCheck.git
+        ```
+    *   This will create a `DevFlowCheck` directory.
+
+2.  **Install Dependencies:**
+    *   Navigate into the newly created project directory:
+        ```bash
+        cd DevFlowCheck
+        ```
+    *   Run the command to install necessary libraries:
         ```bash
         npm install
         ```
         *(This installs project-specific libraries, but **not** the `task-master` CLI tool itself. The following steps use `npm run` commands which utilize the project's internal scripts.)*
 
-2.  **Define Requirements:**
-    *   Discuss and clearly define the project's goals, features, and scope.
+3.  **Define Requirements (for DevFlowCheck tasks):**
+    *   Discuss and clearly define the project's goals, features, and scope that *DevFlowCheck itself* should work on.
     *   Create a Product Requirements Document (PRD) file (e.g., `prd.txt`) detailing these requirements. Structure it clearly (e.g., using headings for features).
 
-3.  **Generate Tasks:**
-    *   Use the built-in scripts (via `npm run`) to process your PRD and create the task structure:
+4.  **Generate Tasks:**
+    *   Use the built-in scripts (via `npm run`) to process your PRD and create the task structure for DevFlowCheck:
         *   Parse the PRD to create `tasks.json`:
             ```bash
             npm run parse-prd -- --input=path/to/your/prd.txt
@@ -29,12 +40,41 @@ This project leverages an automated workflow. Follow these steps to get started:
             npm run generate
             ```
 
-4.  **Run the Orchestrator:**
+5.  **Run the Orchestrator:**
     *   Once the tasks are generated, start the automated workflow:
         ```bash
         node orchestrator.js
         ```
     *   The orchestrator will now take over, processing the tasks defined in `tasks.json`.
+
+---
+
+## Using as a Template for a New Project
+
+If you want to use this repository's structure and tools as a starting point for a **completely new project** (e.g., named `MyNewApp`), follow these steps *instead* of the ones above:
+
+1.  **Clone with New Name:** Clone the repository directly into a folder with your new project's name:
+    ```bash
+    git clone https://github.com/bestyec/DevFlowCheck.git MyNewApp
+    cd MyNewApp
+    ```
+2.  **Remove Original Git History:** Detach it from the `DevFlowCheck` history:
+    ```bash
+    # Use this command for PowerShell:
+    Remove-Item -Recurse -Force .git
+    # Or this for Bash/Linux/Mac:
+    # rm -rf .git
+    ```
+3.  **Initialize New Git Repository:** Start fresh tracking for your new project:
+    ```bash
+    git init
+    ```
+4.  **Install Dependencies:**
+    ```bash
+    npm install
+    ```
+5.  **Update Project Name:** Edit the `package.json` file and change the `"name"` field from `"devflowcheck"` (or `"nestflex"`) to `"mynewapp"` (or your actual project name).
+6.  **Start Your Project:** Now you can define requirements (PRD) and generate tasks specifically for `MyNewApp` using the `npm run parse-prd` and `npm run generate` commands within the `MyNewApp` folder, then run `node orchestrator.js` when ready.
 
 ---
 
@@ -129,42 +169,6 @@ task-master analyze-complexity --research
 # Manually expand a task
 task-master expand --id <task_id> --research 
 ```
-
----
-
-## Using as a Template
-
-This repository is designed to be used as a starting template for new projects requiring automated task orchestration.
-
-1.  **Clone the Repository:** Instead of running `task-master init`, clone this repository to your new project folder:
-    ```bash
-    git clone <URL_of_this_repository_on_GitHub> <your_new_project_name>
-    cd <your_new_project_name>
-    ```
-2.  **Configure Environment:**
-    *   Copy `.env.example` to `.env` (if `.env.example` exists) or create a new `.env` file.
-    *   **Important:** Edit the `.env` file and add your actual API keys (e.g., `GEMINI_API_KEY`).
-3.  **Install Dependencies:** If needed, run:
-    ```bash
-    npm install
-    ```
-4.  **Generate Initial Tasks:** Create your initial task list based on your new project's requirements:
-    *   **Option A (Recommended):** Write a Product Requirements Document (PRD) (e.g., `docs/prd.txt`) and run:
-        ```bash
-        task-master parse-prd docs/prd.txt
-        ```
-    *   **Option B:** Manually edit the `tasks/tasks.json` file (clearing the empty tasks array first if needed).
-    *   **Option C:** Use `task-master init` *carefully* (it might overwrite some configurations, ensure it doesn't delete `orchestrator.js` etc. - Cloning is safer).
-5.  **Generate Task Files:** Create individual task files:
-    ```bash
-    task-master generate
-    ```
-6.  **Run the Orchestrator:** Start the automated workflow:
-    ```bash
-    node orchestrator.js
-    ```
-
-Now the orchestrator will work on the tasks specific to your new project.
 
 ---
 
