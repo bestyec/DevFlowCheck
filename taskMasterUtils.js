@@ -46,11 +46,17 @@ async function runTaskMasterCommand(command, args = []) {
  * @returns {{taskId: string | null, taskTitle: string | null}} The extracted task ID and title, or nulls if not found.
  */
 function parseNextOutput(output) {
-    const match = output.match(/Next Task: #([\d.]+) - (.*?)(?:\\n|│)/);
+    // Updated regex to handle potential leading lines and match the target line
+    // Using 'm' flag for multi-line matching might be needed if output is complex
+    const match = output.match(/Next Task: #([\d.]+) - (.*)/);
     if (match && match[1] && match[2]) {
+        // Trim potential trailing characters or whitespace from the title
         return { taskId: match[1].trim(), taskTitle: match[2].trim() };
     }
     console.error("Could not parse task ID and Title from 'next' output.");
+    console.error("--- Start Next Output ---");
+    console.error(output);
+    console.error("--- End Next Output ---");
     return { taskId: null, taskTitle: null };
 }
 
