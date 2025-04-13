@@ -10,10 +10,8 @@ import { execSync } from 'child_process';
  * @returns {Promise<{success: boolean, output: string}>} An object indicating success and containing the raw terminal output or error message.
  */
 async function runTaskMasterCommand(command, args = []) {
-    // Construct the command using npx to ensure it uses the globally available
-    // task-master or prompts for installation if not found.
-    // Alternatively, if task-master was a dependency, we could use a relative path.
-    const fullCommand = `npx -y claude-task-master ${command} ${args.join(' ')}`;
+    // Revert to executing the local dev script which handles command parsing
+    const fullCommand = `node scripts/dev.js ${command} ${args.join(' ')}`;
     console.log(`Executing: ${fullCommand}`);
     try {
         // Execute the command synchronously and capture stdout
