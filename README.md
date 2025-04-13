@@ -24,12 +24,22 @@ Follow these steps to set up and run the **DevFlowCheck** project itself:
         ```
         *(This installs project-specific libraries, but **not** the `task-master` CLI tool itself. The following steps use `npm run` commands which utilize the project's internal scripts.)*
 
-3.  **Define Requirements (for DevFlowCheck tasks):**
-    *   Discuss and clearly define the project's goals, features, and scope that *DevFlowCheck itself* should work on.
-    *   Create a Product Requirements Document (PRD) file (e.g., `prd.txt`) detailing these requirements. Structure it clearly (e.g., using headings for features).
+3.  **Configure Environment:**
+    *   Copy the example environment file:
+        ```bash
+        # On Windows (Command Prompt/PowerShell)
+        copy .env.example .env
+        # On Linux/macOS/Git Bash
+        # cp .env.example .env 
+        ```
+    *   **Crucial:** Edit the new `.env` file with a text editor and add your actual API keys, especially `GEMINI_API_KEY`. Other API keys might be needed depending on configured features.
 
-4.  **Generate Tasks:**
-    *   Use the built-in scripts (via `npm run`) to process your PRD and create the task structure for DevFlowCheck:
+4.  **Define Requirements & Create PRD:**
+    *   **Discuss:** Clearly define the project's goals, features, and scope that *DevFlowCheck itself* should work on. Think about the initial set of tasks.
+    *   **Document:** Create a Product Requirements Document (PRD) file (e.g., `prd.txt`) detailing these requirements. Structure it clearly (e.g., using headings for features, bullet points for details) to help the parsing step.
+
+5.  **Generate Tasks from PRD:**
+    *   Use the built-in scripts (via `npm run`) to process your PRD and create the task structure:
         *   Parse the PRD to create `tasks.json`:
             ```bash
             npm run parse-prd -- --input=path/to/your/prd.txt
@@ -40,7 +50,7 @@ Follow these steps to set up and run the **DevFlowCheck** project itself:
             npm run generate
             ```
 
-5.  **Run the Orchestrator:**
+6.  **Run the Orchestrator:**
     *   Once the tasks are generated, start the automated workflow:
         ```bash
         node orchestrator.js
