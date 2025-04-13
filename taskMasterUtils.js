@@ -1,126 +1,44 @@
 // Utility functions for interacting with the Task Master CLI
 
-// Reset counter for the new test run
-let nextCommandCallCount = 0;
+import { execSync } from 'child_process';
 
 /**
- * Runs a Task Master command using Cursor's run_terminal_cmd.
+ * Runs a Task Master command using Node's child_process.
  * 
  * @param {string} command The task-master command to run (e.g., 'list', 'next').
  * @param {string[]} args Optional arguments for the command.
  * @returns {Promise<{success: boolean, output: string}>} An object indicating success and containing the raw terminal output or error message.
  */
 async function runTaskMasterCommand(command, args = []) {
-    const fullCommand = `task-master ${command} ${args.join(' ')}`;
+    // Construct the command using npx to ensure it uses the globally available
+    // task-master or prompts for installation if not found.
+    // Alternatively, if task-master was a dependency, we could use a relative path.
+    const fullCommand = `npx -y task-master-ai ${command} ${args.join(' ')}`;
     console.log(`Executing: ${fullCommand}`);
     try {
-        // NOTE: This assumes run_terminal_cmd is available in the execution context.
-        // The actual API call might differ based on the orchestrator's environment.
-        // We are *simulating* the expected structure of the interaction here.
-        // In a real implementation, the orchestrator would call the tool.
-        // For now, we will represent the *intent* to call the tool.
-
-        // Placeholder for the actual API call simulation
-        // const result = await default_api.run_terminal_cmd({ command: fullCommand, is_background: false }); 
-        
-        // Simulating a successful run for now - replace with actual call logic
-        // In a real test, we'd inject varying outputs here.
-        let simulatedOutput = `Simulated successful output for: ${fullCommand}`;
-
-        // --- UPDATED SIMULATION ---        
-        if (command === 'next') {
-            nextCommandCallCount++;
-            let nextTaskId = '7'; // Default to Task 7 first
-            let nextTaskTitle = 'Implement Task Completion Status Update';
-
-            if (nextCommandCallCount === 2) { // Second call should give Task 9
-                nextTaskId = '9';
-                nextTaskTitle = 'Implement Automated Test Fixing Logic';
-            } else if (nextCommandCallCount === 3) { // Third call should give Task 10
-                nextTaskId = '10';
-                nextTaskTitle = 'Implement Complexity Analysis and Automated Expansion';
-            } else if (nextCommandCallCount > 3) { // After Task 10, simulate no more tasks
-                 simulatedOutput = `No tasks available.`; 
-                 // Early return to avoid formatting the 'Next Task' box for no task
-                 console.log("Simulation: Command successful (No tasks left).");
-                 return { success: true, output: simulatedOutput }; 
-            }
-
-            // Format the output correctly only if a task is found
-            simulatedOutput = `
-PS C:\wamp64\www\DevFlowCheck> task-master next
-...
-╭──────────────────────────────────────────────────────────────────────────╮
-│ Next Task: #${nextTaskId} - ${nextTaskTitle}                    │
-╰──────────────────────────────────────────────────────────────────────────╯
-...
-            `;
-        } else if (command === 'show') {
-             const taskIdArg = args.find(arg => arg.startsWith('--id='));
-             const requestedTaskId = taskIdArg ? taskIdArg.split('=')[1] : 'unknown';
-             // Reconstruct a structure similar to the actual output that parseShowOutput expects
-             simulatedOutput = `
-╭─────────────────────────────────────────────────────╮
-│ Subtask: #${requestedTaskId} - Simulated Title for ${requestedTaskId} │ 
-╰─────────────────────────────────────────────────────╯
-┌───────────────┬───────────────────────────────────────────────────────────────────────────┐
-│ ID:           │ ${requestedTaskId}                                                                        │
-│ Title:        │ Simulated Title for ${requestedTaskId}                                     │ 
-└───────────────┴───────────────────────────────────────────────────────────────────────────┘
-
-╭─────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ Implementation Details:                                                                             │
-│                                                                                                     │
-│ Simulated details for task ${requestedTaskId}. Ensure this is parsed correctly.                     │
-│                                                                                                     │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────╯
-
-╭─────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ Test Strategy:                                                                                      │
-│                                                                                                     │
-│ Simulated test strategy for task ${requestedTaskId}. Check for correct parsing.                     │
-│                                                                                                     │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────╯
-            `;
-        } else if (command === 'analyze-complexity') {
-             // analyze-complexity writes to a file, the command output isn't directly parsed by orchestrator.
-             // Just simulate command success.
-             simulatedOutput = `Simulated success for analyze-complexity. Report file should be updated (not simulated here).`;
-             // We should probably *actually write* a simulated report file here for Task 10.2 to read.
-             // TODO: Enhance simulation to write a dummy report file.
-             
-        } else if (command === 'expand') {
-             simulatedOutput = `Simulated successful expansion for args: ${args.join(' ')}`;
-             // TODO: Enhance simulation to actually add subtasks to tasks.json?
-        } else if (command === 'set-status') {
-             simulatedOutput = `Simulated successful status update for args: ${args.join(' ')}`;
-             // TODO: Enhance simulation to actually update tasks.json?
-        } else if (command === 'test') {
-            // Let runTests in orchestrator handle specific simulation for Task 9
-            // Default simulation here assumes pass
-            simulatedOutput = `Simulated test command success.`; 
-        }
-        // --- END OF UPDATED SIMULATION ---
-
-        const simulatedResult = { 
-            exit_code: 0, 
-            output: simulatedOutput 
-        }; 
-        console.log("Simulation: Command finished.");
-
-
-        if (simulatedResult.exit_code !== 0) {
-            console.error(`Command failed with exit code ${simulatedResult.exit_code}: ${fullCommand}`);
-            console.error(simulatedResult.output);
-            return { success: false, output: `Exit Code ${simulatedResult.exit_code}: ${simulatedResult.output}` };
-        }
-        
-        console.log("Simulation: Command successful.");
-        return { success: true, output: simulatedResult.output };
+        // Execute the command synchronously and capture stdout
+        const outputBuffer = execSync(fullCommand, { encoding: 'utf-8', stdio: 'pipe' }); // Capture stdout, inherit stderr
+        const output = outputBuffer.toString().trim();
+        console.log(`Command successful. Output (first 200 chars): ${output.substring(0,200)}...`);
+        return { success: true, output: output };
 
     } catch (error) {
-        console.error(`Error executing command "${fullCommand}":`, error);
-        return { success: false, output: error.message || 'Unknown error during command execution.' };
+        // Log the full error details, including stderr if available
+        console.error(`Error executing command "${fullCommand}":`);
+        console.error(`  Status Code: ${error.status}`);
+        // Stderr might be null or empty, provide fallback message
+        const stderrOutput = error.stderr ? error.stderr.toString().trim() : 'No stderr output.'; 
+        console.error(`  Stderr: ${stderrOutput}`);
+        // Stdout might also contain useful info even on error
+        const stdoutOutput = error.stdout ? error.stdout.toString().trim() : 'No stdout output on error.';
+        console.error(`  Stdout: ${stdoutOutput}`);
+        console.error(`  Error Message: ${error.message}`);
+        
+        // Return a combined error message
+        return { 
+            success: false, 
+            output: `Exit Code ${error.status}: ${stderrOutput || error.message}` 
+        };
     }
 }
 

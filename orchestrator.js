@@ -7,6 +7,7 @@ console.log("Orchestrator started.");
 
 import { runTaskMasterCommand, parseNextOutput, parseShowOutput } from './taskMasterUtils.js';
 import fs from 'fs/promises'; // Added for reading complexity report
+import { execSync } from 'child_process'; // Import execSync here as well
 
 class Orchestrator {
     constructor() {
@@ -133,30 +134,28 @@ ${testingRequirements}
         const commitMessage = `feat: Complete task ${taskId} - ${taskTitle}`;
         console.log(`Commit message: "${commitMessage}"`);
         try {
-            // Simulate calling the git add tool
-            this.log("SIMULATING: Call mcp_git_git_add({ files: ['.'], repo_path: '.' })");
-            // const addResult = await default_api.mcp_git_git_add({ files: ['.'], repo_path: '.' });
-            // Assume success for simulation
-            const addSuccess = true; // await this.simulateToolCall('mcp_git_git_add');
-            if (!addSuccess) {
-                 console.error("Git add failed (simulation).");
-                 return false;
-            }
-            console.log("Git add successful (simulation).");
+            // Stage all changes
+            this.log("Staging changes with 'git add .'...");
+            execSync('git add .', { stdio: 'inherit' }); // Show output/errors directly
+            this.log("Git add successful.");
 
-            // Simulate calling the git commit tool
-            this.log(`SIMULATING: Call mcp_git_git_commit({ message: \"${commitMessage}\", repo_path: '.' })`);
-            // const commitResult = await default_api.mcp_git_git_commit({ message: commitMessage, repo_path: '.' });
-            // Assume success for simulation
-            const commitSuccess = true; // await this.simulateToolCall('mcp_git_git_commit');
-            if (!commitSuccess) {
-                console.error("Git commit failed (simulation).");
-                return false;
-            }
-            console.log("Git commit successful (simulation).");
+            // Commit the changes
+            this.log(`Committing with message: "${commitMessage}"`);
+            // Need to handle potential quotes in the commit message for the command line
+            const escapedCommitMessage = commitMessage.replace(/"/g, '\"'); // Basic escaping
+            execSync(`git commit -m "${escapedCommitMessage}"`, { stdio: 'inherit' }); // Show output/errors directly
+            this.log("Git commit successful.");
             return true;
         } catch (error) {
-            console.error("An error occurred during commitChanges simulation:", error);
+            console.error("An error occurred during Git operations:");
+            // Errors from execSync often include status, stderr, stdout
+            console.error(`  Status Code: ${error.status}`);
+            const stderrOutput = error.stderr ? error.stderr.toString().trim() : 'No stderr output.';
+            console.error(`  Stderr: ${stderrOutput}`);
+            const stdoutOutput = error.stdout ? error.stdout.toString().trim() : 'No stdout output on error.';
+            console.error(`  Stdout: ${stdoutOutput}`);
+            console.error(`  Error Message: ${error.message}`);
+            this.log("Git operations failed.");
             return false;
         }
     }
