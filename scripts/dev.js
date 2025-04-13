@@ -1,73 +1,122 @@
 #!/usr/bin/env node
 
+import fs from 'fs-extra'; // Use fs-extra for easier file handling
+import path from 'path'; // Needed for constructing paths
+
 /**
  * dev.js
- * Task Master CLI - Basic command handler
+ * Task Master CLI - Rebuilding core logic
  * 
- * Placeholder implementation to make the script runnable.
- * Actual command logic needs to be implemented/restored.
+ * Implementing basic command functionality.
  */
 
-// Get command line arguments, excluding 'node' and the script path
-const args = process.argv.slice(2);
-const command = args[0]; // The main command (e.g., 'list', 'next')
-const commandArgs = args.slice(1); // Arguments for the command
+// --- Configuration ---
+const TASKS_FILE_PATH = path.join('tasks', 'tasks.json');
+const TASKS_DIR = 'tasks';
 
-console.log(`[dev.js] Received command: ${command}`);
-console.log(`[dev.js] Arguments: ${commandArgs.join(' ')}`);
+// --- Helper Functions ---
 
-// Basic command dispatcher (placeholder logic)
-switch (command) {
-    case 'list':
-        console.log('[dev.js] Handling "list" command...');
-        // TODO: Implement actual list logic
-        break;
-    case 'next':
-        console.log('[dev.js] Handling "next" command...');
-        // TODO: Implement actual next logic
-        // Example output needed by orchestrator: "Next Task: #<ID> - <Title> ..."
-        // For now, print something parseNextOutput might handle (or fail on, which is ok for now)
-        console.log("Next Task: #1 - Placeholder Task Title (Not Real)"); 
-        break;
-    case 'generate':
-        console.log('[dev.js] Handling "generate" command...');
-        // TODO: Implement actual generate logic
-        break;
-    case 'parse-prd':
-        console.log('[dev.js] Handling "parse-prd" command...');
-        // TODO: Implement actual parse-prd logic
-        break;
-    case 'show':
-        console.log('[dev.js] Handling "show" command...');
-        // TODO: Implement actual show logic
-        const taskIdShow = commandArgs.find(arg => arg.startsWith('--id='))?.split('=')[1] || 'unknown';
-        // Modify placeholder output to better match expected format for parsing
-        console.log(`Title:        │ Placeholder Title for ${taskIdShow} │`); // Added trailing pipe
-        console.log(`\nImplementation Details:\n│ Placeholder details for task ${taskIdShow}. │\n╰`); // Added prefix/suffix
-        console.log(`\nTest Strategy:\n│ Placeholder test strategy for task ${taskIdShow}. │\n╰`); // Added prefix/suffix
-        break;
-    case 'analyze-complexity':
-        console.log('[dev.js] Handling "analyze-complexity" command...');
-        // TODO: Implement actual analyze-complexity logic (needs to write report file)
-        console.log("Simulating complexity analysis completion (no report file written).");
-        break;
-    case 'expand':
-        console.log('[dev.js] Handling "expand" command...');
-        // TODO: Implement actual expand logic
-        break;
-    case 'set-status':
-        console.log('[dev.js] Handling "set-status" command...');
-        // TODO: Implement actual set-status logic
-        break;
-    case 'test':
-        console.log('[dev.js] Handling "test" command... (Orchestrator usually uses npm run test)');
-        // This might not be called directly often, as package.json handles test runs.
-        break;
-    default:
-        console.log(`[dev.js] Unknown command: ${command}`);
-        // TODO: Add help message or usage instructions
-        process.exit(1); // Exit with error for unknown commands
+async function readTasks() {
+    try {
+        const tasksData = await fs.readJson(TASKS_FILE_PATH);
+        return tasksData.tasks || []; // Assuming tasks are under a 'tasks' key
+    } catch (error) {
+        if (error.code === 'ENOENT') {
+            console.error(`Error: Tasks file not found at ${TASKS_FILE_PATH}. Run parse-prd or create it manually.`);
+        } else {
+            console.error(`Error reading or parsing tasks file: ${error.message}`);
+        }
+        return null; // Indicate failure
+    }
 }
 
-// Exit successfully for known commands (placeholder)
-process.exit(0); 
+// --- Command Implementations ---
+
+async function listTasks() {
+    console.log('Listing tasks...');
+    const tasks = await readTasks();
+    if (tasks === null) return; // Error handled in readTasks
+
+    if (tasks.length === 0) {
+        console.log("No tasks found.");
+        return;
+    }
+
+    console.log("\nID   | Status    | Title");
+    console.log("-----|-----------|--------------------------------");
+    tasks.forEach(task => {
+        const status = task.status || 'pending';
+        const title = task.title || 'Untitled Task';
+        console.log(`${String(task.id).padEnd(4)} | ${status.padEnd(9)} | ${title}`);
+    });
+    console.log("\n");
+}
+
+// --- Main Execution Logic ---
+
+async function main() {
+    // Get command line arguments, excluding 'node' and the script path
+    const args = process.argv.slice(2);
+    const command = args[0]; // The main command (e.g., 'list', 'next')
+    const commandArgs = args.slice(1); // Arguments for the command
+
+    console.log(`[dev.js] Received command: ${command}`);
+    console.log(`[dev.js] Arguments: ${commandArgs.join(' ')}`);
+
+    let exitCode = 0;
+
+    // Basic command dispatcher
+    switch (command) {
+        case 'list':
+            await listTasks();
+            break;
+        case 'next':
+            console.log('[dev.js] Handling "next" command...');
+            // TODO: Implement actual next logic
+            console.log("Next Task: #1 - Placeholder Task Title (Not Real)"); 
+            break;
+        case 'generate':
+            console.log('[dev.js] Handling "generate" command...');
+            // TODO: Implement actual generate logic
+            break;
+        case 'parse-prd':
+            console.log('[dev.js] Handling "parse-prd" command...');
+            // TODO: Implement actual parse-prd logic
+            break;
+        case 'show':
+            console.log('[dev.js] Handling "show" command...');
+            // TODO: Implement actual show logic
+            const taskIdShow = commandArgs.find(arg => arg.startsWith('--id='))?.split('=')[1] || 'unknown';
+            console.log(`Title:        │ Placeholder Title for ${taskIdShow} │`);
+            console.log(`\nImplementation Details:\n│ Placeholder details for task ${taskIdShow}. │\n╰`);
+            console.log(`\nTest Strategy:\n│ Placeholder test strategy for task ${taskIdShow}. │\n╰`);
+            break;
+        case 'analyze-complexity':
+            console.log('[dev.js] Handling "analyze-complexity" command...');
+            // TODO: Implement actual analyze-complexity logic
+            console.log("Simulating complexity analysis completion (no report file written).");
+            break;
+        case 'expand':
+            console.log('[dev.js] Handling "expand" command...');
+            // TODO: Implement actual expand logic
+            break;
+        case 'set-status':
+            console.log('[dev.js] Handling "set-status" command...');
+            // TODO: Implement actual set-status logic
+            break;
+        case 'test':
+            console.log('[dev.js] Handling "test" command... (Orchestrator usually uses npm run test)');
+            break;
+        default:
+            console.log(`[dev.js] Unknown command: ${command}`);
+            // TODO: Add help message or usage instructions
+            exitCode = 1; // Exit with error for unknown commands
+    }
+    
+    process.exit(exitCode);
+}
+
+main().catch(error => {
+    console.error("An unexpected error occurred:", error);
+    process.exit(1);
+}); 
