@@ -19,26 +19,26 @@ console.log(`[dev.js] Arguments: ${commandArgs.join(' ')}`);
 // Basic command dispatcher (placeholder logic)
 switch (command) {
     case 'list':
-        console.log('[dev.js] Handling 'list' command...');
+        console.log('[dev.js] Handling "list" command...');
         // TODO: Implement actual list logic
         break;
     case 'next':
-        console.log('[dev.js] Handling 'next' command...');
+        console.log('[dev.js] Handling "next" command...');
         // TODO: Implement actual next logic
         // Example output needed by orchestrator: "Next Task: #<ID> - <Title> ..."
         // For now, print something parseNextOutput might handle (or fail on, which is ok for now)
         console.log("Next Task: #1 - Placeholder Task Title (Not Real)"); 
         break;
     case 'generate':
-        console.log('[dev.js] Handling 'generate' command...');
+        console.log('[dev.js] Handling "generate" command...');
         // TODO: Implement actual generate logic
         break;
     case 'parse-prd':
-        console.log('[dev.js] Handling 'parse-prd' command...');
+        console.log('[dev.js] Handling "parse-prd" command...');
         // TODO: Implement actual parse-prd logic
         break;
     case 'show':
-        console.log('[dev.js] Handling 'show' command...');
+        console.log('[dev.js] Handling "show" command...');
         // TODO: Implement actual show logic
         // Example output needed by orchestrator: Detailed task info format
         const taskIdShow = commandArgs.find(arg => arg.startsWith('--id='))?.split('=')[1] || 'unknown';
@@ -48,20 +48,20 @@ switch (command) {
         console.log(`Test Strategy:\nPlaceholder test strategy for task ${taskIdShow}.`);
         break;
     case 'analyze-complexity':
-        console.log('[dev.js] Handling 'analyze-complexity' command...');
+        console.log('[dev.js] Handling "analyze-complexity" command...');
         // TODO: Implement actual analyze-complexity logic (needs to write report file)
         console.log("Simulating complexity analysis completion (no report file written).");
         break;
     case 'expand':
-        console.log('[dev.js] Handling 'expand' command...');
+        console.log('[dev.js] Handling "expand" command...');
         // TODO: Implement actual expand logic
         break;
     case 'set-status':
-        console.log('[dev.js] Handling 'set-status' command...');
+        console.log('[dev.js] Handling "set-status" command...');
         // TODO: Implement actual set-status logic
         break;
     case 'test':
-        console.log('[dev.js] Handling 'test' command... (Orchestrator usually uses npm run test)');
+        console.log('[dev.js] Handling "test" command... (Orchestrator usually uses npm run test)');
         // This might not be called directly often, as package.json handles test runs.
         break;
     default:
