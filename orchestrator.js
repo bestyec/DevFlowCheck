@@ -231,6 +231,25 @@ ${testingRequirements}
                 try {
                     // Assuming analyze-complexity writes to the default file
                     const reportPath = 'scripts/task-complexity-report.json';
+                    
+                    // --- START: Added Check and Creation of Dummy Report --- 
+                    try {
+                        await fs.access(reportPath); // Check if file exists
+                        this.log("Complexity report file found.");
+                    } catch (accessError) {
+                        if (accessError.code === 'ENOENT') {
+                            // File does not exist, create a dummy one for simulation
+                            this.log("Complexity report file not found. Creating dummy report for simulation.");
+                            const dummyReportContent = JSON.stringify({ complexityAnalysis: [] }, null, 2);
+                            await fs.writeFile(reportPath, dummyReportContent, 'utf-8');
+                            this.log("Dummy complexity report file created.");
+                        } else {
+                            // Other error accessing the file, re-throw
+                            throw accessError;
+                        }
+                    }
+                    // --- END: Added Check and Creation of Dummy Report ---
+
                     // We need a way to read files in Node.js. Let's use the 'fs' module.
                     const reportContent = await fs.readFile(reportPath, 'utf-8');
                     const reportData = JSON.parse(reportContent);
