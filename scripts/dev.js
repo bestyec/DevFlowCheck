@@ -40,12 +40,11 @@ switch (command) {
     case 'show':
         console.log('[dev.js] Handling "show" command...');
         // TODO: Implement actual show logic
-        // Example output needed by orchestrator: Detailed task info format
         const taskIdShow = commandArgs.find(arg => arg.startsWith('--id='))?.split('=')[1] || 'unknown';
-        console.log(`ID:           │ ${taskIdShow}`);
-        console.log(`Title:        │ Placeholder Title for ${taskIdShow}`);
-        console.log(`Implementation Details:\nPlaceholder details for task ${taskIdShow}.`);
-        console.log(`Test Strategy:\nPlaceholder test strategy for task ${taskIdShow}.`);
+        // Modify placeholder output to better match expected format for parsing
+        console.log(`Title:        │ Placeholder Title for ${taskIdShow} │`); // Added trailing pipe
+        console.log(`\nImplementation Details:\n│ Placeholder details for task ${taskIdShow}. │\n╰`); // Added prefix/suffix
+        console.log(`\nTest Strategy:\n│ Placeholder test strategy for task ${taskIdShow}. │\n╰`); // Added prefix/suffix
         break;
     case 'analyze-complexity':
         console.log('[dev.js] Handling "analyze-complexity" command...');
