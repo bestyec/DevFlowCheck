@@ -13,7 +13,7 @@ async function runTaskMasterCommand(command, args = []) {
     // Construct the command using npx to ensure it uses the globally available
     // task-master or prompts for installation if not found.
     // Alternatively, if task-master was a dependency, we could use a relative path.
-    const fullCommand = `npx -y task-master-ai ${command} ${args.join(' ')}`;
+    const fullCommand = `npx -y claude-task-master ${command} ${args.join(' ')}`;
     console.log(`Executing: ${fullCommand}`);
     try {
         // Execute the command synchronously and capture stdout
