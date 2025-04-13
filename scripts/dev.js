@@ -87,9 +87,17 @@ async function main() {
             console.log('[dev.js] Handling "show" command...');
             // TODO: Implement actual show logic
             const taskIdShow = commandArgs.find(arg => arg.startsWith('--id='))?.split('=')[1] || 'unknown';
-            console.log(`Title:        │ Placeholder Title for ${taskIdShow} │`);
-            console.log(`\nImplementation Details:\n│ Placeholder details for task ${taskIdShow}. │\n╰`);
-            console.log(`\nTest Strategy:\n│ Placeholder test strategy for task ${taskIdShow}. │\n╰`);
+            console.log(`Title:        │ Placeholder Title for ${taskIdShow} │`); 
+            console.log(`\n╭─────────────────────────────────────────────────────────────────────────────────────────────────────╮`);
+            console.log(`│ Implementation Details:                                                                             │`);
+            console.log(`│                                                                                                     │`);
+            console.log(`│ Placeholder details for task ${taskIdShow}.                                                         │`);
+            console.log(`╰─────────────────────────────────────────────────────────────────────────────────────────────────────╯`);
+            console.log(`\n╭─────────────────────────────────────────────────────────────────────────────────────────────────────╮`);
+            console.log(`│ Test Strategy:                                                                                      │`);
+            console.log(`│                                                                                                     │`);
+            console.log(`│ Placeholder test strategy for task ${taskIdShow}.                                                     │`);
+            console.log(`╰─────────────────────────────────────────────────────────────────────────────────────────────────────╯`);
             break;
         case 'analyze-complexity':
             console.log('[dev.js] Handling "analyze-complexity" command...');
