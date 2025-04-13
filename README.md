@@ -1,5 +1,45 @@
 # DevFlowCheck Task Orchestrator
 
+## Getting Started / كيفية البدء
+
+This project leverages an automated workflow. Follow these steps to get started:
+يستخدم هذا المشروع سير عمل مؤتمت. اتبع هذه الخطوات للبدء:
+
+1.  **Install Dependencies / تثبيت الاعتماديات:**
+    *   Clone the repository (if you haven't already). / قم باستنساخ المستودع (إذا لم تكن قد فعلت ذلك بالفعل).
+    *   Navigate to the project directory (`DevFlowCheck`). / انتقل إلى مجلد المشروع (`DevFlowCheck`).
+    *   Run the command: / قم بتشغيل الأمر:
+        ```bash
+        npm install
+        ```
+
+2.  **Define Requirements / تحديد المتطلبات:**
+    *   Discuss and clearly define the project's goals, features, and scope. / ناقش وحدد بوضوح أهداف المشروع وميزاته ونطاقه.
+    *   Create a Product Requirements Document (PRD) file (e.g., `prd.txt`) detailing these requirements. Structure it clearly (e.g., using headings for features). / قم بإنشاء ملف مستند متطلبات المنتج (PRD) (على سبيل المثال، `prd.txt`) يفصل هذه المتطلبات. قم بتنظيمه بوضوح (على سبيل المثال، باستخدام العناوين للميزات).
+
+3.  **Generate Tasks / إنشاء المهام:**
+    *   Use the Task Master tool (via npm scripts) to process your PRD and create the task structure: / استخدم أداة Task Master (عبر سكربتات npm) لمعالجة PRD الخاص بك وإنشاء هيكل المهام:
+        *   Parse the PRD to create `tasks.json`: / قم بتحليل PRD لإنشاء `tasks.json`:
+            ```bash
+            npm run parse-prd -- --input=path/to/your/prd.txt
+            ```
+            *(Replace `path/to/your/prd.txt` with the actual path to your PRD file / استبدل `path/to/your/prd.txt` بالمسار الفعلي لملف PRD الخاص بك)*
+        *   Generate individual task files (`tasks/*.md`) from `tasks.json`: / قم بإنشاء ملفات المهام الفردية (`tasks/*.md`) من `tasks.json`:
+            ```bash
+            npm run generate
+            ```
+
+4.  **Run the Orchestrator / تشغيل المنظم:**
+    *   Once the tasks are generated, start the automated workflow: / بمجرد إنشاء المهام، ابدأ سير العمل المؤتمت:
+        ```bash
+        node orchestrator.js
+        ```
+    *   The orchestrator will now take over, processing the tasks defined in `tasks.json`. / سيتولى المنظم الآن المهمة، ويعالج المهام المحددة في `tasks.json`.
+
+---
+
+*(Existing README content follows here / يتبع محتوى README الحالي هنا)*
+
 This project combines the `task-master` CLI tool for AI-assisted task management with a Node.js orchestrator (`orchestrator.js`) designed to automate the development workflow. The orchestrator fetches tasks, analyzes complexity, expands complex tasks, simulates AI code generation, performs quality assurance (linting, testing), attempts automated test fixing, and commits changes via Git.
 
 ## Core Components
@@ -170,3 +210,44 @@ Now the orchestrator will work on the tasks specific to your new project.
 تحسينات: تحسين بناء الـ prompts، أو معالجة الأخطاء، أو إضافة المزيد من التسجيلات، أو تحسين واجهة المستخدم إذا كان ذلك مناسبًا.
 التوقف هنا: يمكن اعتبار هذا الإصدار الحالي بمثابة نموذج أولي مكتمل للمفهوم.
 ما هي وجهتك التالية المفضلة؟
+
+# NestFlex Project (Placeholder Name)
+
+## Getting Started / كيفية البدء
+
+This project leverages an automated workflow. Follow these steps to get started:
+يستخدم هذا المشروع سير عمل مؤتمت. اتبع هذه الخطوات للبدء:
+
+1.  **Install Dependencies / تثبيت الاعتماديات:**
+    *   Navigate to the project directory (`nestflex`). / انتقل إلى مجلد المشروع (`nestflex`).
+    *   Run the command: / قم بتشغيل الأمر:
+        ```bash
+        npm install
+        ```
+
+2.  **Define Requirements / تحديد المتطلبات:**
+    *   Discuss and clearly define the project's goals, features, and scope. / ناقش وحدد بوضوح أهداف المشروع وميزاته ونطاقه.
+    *   Create a Product Requirements Document (PRD) file (e.g., `prd.txt`) detailing these requirements. Structure it clearly (e.g., using headings for features). / قم بإنشاء ملف مستند متطلبات المنتج (PRD) (على سبيل المثال، `prd.txt`) يفصل هذه المتطلبات. قم بتنظيمه بوضوح (على سبيل المثال، باستخدام العناوين للميزات).
+
+3.  **Generate Tasks / إنشاء المهام:**
+    *   Use the Task Master tool (via npm scripts) to process your PRD and create the task structure: / استخدم أداة Task Master (عبر سكربتات npm) لمعالجة PRD الخاص بك وإنشاء هيكل المهام:
+        *   Parse the PRD to create `tasks.json`: / قم بتحليل PRD لإنشاء `tasks.json`:
+            ```bash
+            npm run parse-prd -- --input=path/to/your/prd.txt
+            ```
+            *(Replace `path/to/your/prd.txt` with the actual path to your PRD file / استبدل `path/to/your/prd.txt` بالمسار الفعلي لملف PRD الخاص بك)*
+        *   Generate individual task files (`tasks/*.md`) from `tasks.json`: / قم بإنشاء ملفات المهام الفردية (`tasks/*.md`) من `tasks.json`:
+            ```bash
+            npm run generate
+            ```
+
+4.  **Run the Orchestrator / تشغيل المنظم:**
+    *   Once the tasks are generated, start the automated workflow: / بمجرد إنشاء المهام، ابدأ سير العمل المؤتمت:
+        ```bash
+        node orchestrator.js
+        ```
+    *   The orchestrator will now take over, processing the tasks defined in `tasks.json`. / سيتولى المنظم الآن المهمة، ويعالج المهام المحددة في `tasks.json`.
+
+---
+
+*(Existing README content might follow here / قد يتبع محتوى README الحالي هنا)*
